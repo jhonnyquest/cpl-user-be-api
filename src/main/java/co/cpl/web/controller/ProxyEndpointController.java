@@ -12,8 +12,9 @@ package co.cpl.web.controller;
 import java.util.HashMap;
 import java.util.Properties;
 
+import co.cpl.dto.UsersDto;
 import co.cpl.service.BusinessManager;
-import co.cpl.validators.LoadRequestValidator;
+import co.cpl.validators.UsersValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class ProxyEndpointController extends BaseRestController {
 	BusinessManager businessManager;
 
 	@Autowired
-	LoadRequestValidator loadRequestValidator;
+    UsersValidator loadRequestValidator;
 
 	// This is an example of how to create proxy endpoints controller methods
 	// please build your own constants based on this
@@ -65,7 +66,7 @@ public class ProxyEndpointController extends BaseRestController {
 //	 * @return load confirmation registry
 //	 */
 //    @RequestMapping(value = "/payment/load", method = RequestMethod.POST)
-//    public ResponseEntity<Object> loadPayment(@Validated @RequestBody LoadRequestDto load,
+//    public ResponseEntity<Object> loadPayment(@Validated @RequestBody UsersDto load,
 //                                                 BindingResult result, HttpServletRequest request) {
 //		loadRequestValidator.validate(load, result);
 //		ResponseEntity<Object> responseEntity = apiValidator(result);
@@ -74,7 +75,7 @@ public class ProxyEndpointController extends BaseRestController {
 //		}
 //
 //		try {
-//			Load registry = businessManager.loadPayment(load);
+//			Users registry = businessManager.loadPayment(load);
 //			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.PAYMENT_RESPONSE, registry));
 //		} catch (HttpClientErrorException ex) {
 //			responseEntity = setErrorResponse(ex, request);
@@ -82,6 +83,21 @@ public class ProxyEndpointController extends BaseRestController {
 //
 //		return responseEntity;
 //    }
+
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Object> findUserById(@PathVariable("id") String id,
+												HttpServletRequest request) {
+		//transactionValidator.validate(Users, result);
+		//TODO: build custom validator for face_plate, if it apply
+		ResponseEntity<Object> responseEntity;
+		try {
+			UsersDto users = businessManager.findUserById(id);
+			responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.TRANSACTION_RESPONSE, users));
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+		return responseEntity;
+	}
 
 	private ResponseEntity<Object> setErrorResponse(HttpClientErrorException ex, HttpServletRequest request) {
 		HashMap<String, Object> map = new HashMap<>();

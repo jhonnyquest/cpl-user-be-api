@@ -28,9 +28,9 @@ public class DataSourceSingleton {
         if (instance == null) {
             HikariConfig config = new HikariConfig();
 
-            config.setDriverClassName("com.mysql.jdbc.Driver");
+            config.setDriverClassName("com.mysql.cj.jdbc.Driver");
             config.setJdbcUrl(Optional.ofNullable(System.getenv("USERS_DB_URL"))
-                    .orElse("jdbc:mysql://172.22.0.2:3306/cpl_users"));
+                    .orElse("jdbc:mysql://localhost:3306/cpl_users"));
             config.setUsername(Optional.ofNullable(System.getenv("USERS_JDBC_USERNAME"))
                     .orElse("cpluser"));
             config.setPassword(Optional.ofNullable(System.getenv("USERS_JDBC_PASSWORD"))

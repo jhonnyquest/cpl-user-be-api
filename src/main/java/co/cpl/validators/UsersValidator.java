@@ -1,6 +1,6 @@
 package co.cpl.validators;
 
-import co.cpl.dto.LoadRequestDto;
+import co.cpl.dto.UsersDto;
 import co.cpl.enums.Codes;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -12,7 +12,7 @@ import java.util.Objects;
 // This is an example of how to declare constants
 // please build your own constants based on this
 @Component
-public class LoadRequestValidator extends BaseValidator implements Validator {
+public class UsersValidator extends BaseValidator implements Validator {
 
     /*
      * This method validates the login data
@@ -22,7 +22,8 @@ public class LoadRequestValidator extends BaseValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
 
-        LoadRequestDto loadRequest = (LoadRequestDto) target;
+        UsersDto loadRequest = (UsersDto) target;
+        /*
         if (Objects.isNull(loadRequest.getBuyer()) || StringUtils.isEmpty(loadRequest.getBuyer().getId())) {
             errors.rejectValue("buyer", Codes.BUYER_CANNOT_BE_NULL.getErrorCode());
         }
@@ -38,10 +39,11 @@ public class LoadRequestValidator extends BaseValidator implements Validator {
         if (StringUtils.isEmpty(loadRequest.getMethod())) {
             errors.rejectValue("amount", Codes.METHOD_CANNOT_BE_NULL.getErrorCode());
         }
+        */
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return LoadRequestDto.class.equals(clazz);
+        return UsersDto.class.equals(clazz);
     }
 }

@@ -21,7 +21,7 @@ services:
     restart: always
 # Update DB environment variables with your own values
     environment:
-      MYSQL_ROOT_PASSWORD: cplrootsuser
+      MYSQL_ROOT_PASSWORD: cplpassword
       MYSQL_DATABASE: cpl_users
       MYSQL_USER: cpluser
       MYSQL_PASSWORD: cplpassword

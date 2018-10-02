@@ -10,6 +10,8 @@
 
 package co.cpl.service;
 
+import co.cpl.dto.UsersDto;
+
 /***
  * Interface for business manager module
  *
@@ -19,5 +21,6 @@ package co.cpl.service;
 public interface BusinessManager {
     // All implemented business methods should be declared here
     // example:
-    // Load loadPayment(LoadRequestDto load);
+    // Users loadPayment(UsersDto load);
+    UsersDto findUserById(String id);
 }
