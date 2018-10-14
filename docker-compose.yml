@@ -12,12 +12,13 @@ services:
 ##################################################################################################################
 ############################################ Database container ##################################################
   db:
-    image: mysql:5.7
+    image: mysql:8.0.11
     container_name: cpl-mysql
-    volumes:
+    command: --default-authentication-plugin=mysql_native_password
 # If you have some data and structure already built, then you can add to mysql data volume, if not then keep this
 # configuration.
-    - db_data:/var/lib/mysql
+    volumes:
+    - ${PWD}/data/mysql:/var/lib/mysql
     restart: always
 # Update DB environment variables with your own values
     environment:
@@ -25,6 +26,9 @@ services:
       MYSQL_DATABASE: cpl_users
       MYSQL_USER: cpluser
       MYSQL_PASSWORD: cplpassword
+# You must be sure that each application is dispatched by a different port to avoid service crash
+    ports:
+    - 3307:3306
 
 ##################################################################################################################
 ############################################ Application container ################################################
@@ -34,7 +38,7 @@ services:
     container_name: cpl-user-api
 # Update this volume link with your own .war generated file
     volumes:
-      - /media/jhonnyquest/Data2/complaints/cpl-user-be-api/target/cpl.user.be.api.war:/usr/local/tomcat/webapps/api.war
+      - ${PWD}/target/cpl.user.be.api.war:/usr/local/tomcat/webapps/api.war
     restart: always
 # Database must be linked to the project to be sure that they are in the same docker network
     links:
@@ -43,11 +47,11 @@ services:
       - db
 # You should create your own env variables to setup your app
     environment:
-      USERS_DB_URL: jdbc:mysql://db:3306/cpl_users
+      USERS_DB_URL: jdbc:mysql://db:3307/cpl_users
       USERS_JDBC_USERNAME: cpluser
       USERS_JDBC_PASSWORD: cplpassword
 # You must be sure that each application is dispatched by a different port to avoid service crash
     ports:
-      - 7080:8080
+      - 5001:8080
 volumes:
   db_data:

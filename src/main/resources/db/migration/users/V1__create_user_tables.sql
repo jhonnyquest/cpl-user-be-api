@@ -13,3 +13,5 @@ CREATE TABLE cpl_users.users (
 
 CREATE INDEX users_name ON cpl_users.users(name);
 CREATE INDEX users_phone ON cpl_users.users(phone);
+
+CREATE TRIGGER users_update_trigger BEFORE UPDATE ON cpl_users.users FOR EACH ROW SET new.update_date = NOW();

@@ -1,13 +1,9 @@
 package co.cpl.validators;
 
-import co.cpl.dto.UsersDto;
-import co.cpl.enums.Codes;
+import co.cpl.dto.UserDto;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import java.util.Objects;
 
 // This is an example of how to declare constants
 // please build your own constants based on this
@@ -22,7 +18,7 @@ public class UsersValidator extends BaseValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
 
-        UsersDto loadRequest = (UsersDto) target;
+        UserDto loadRequest = (UserDto) target;
         /*
         if (Objects.isNull(loadRequest.getBuyer()) || StringUtils.isEmpty(loadRequest.getBuyer().getId())) {
             errors.rejectValue("buyer", Codes.BUYER_CANNOT_BE_NULL.getErrorCode());
@@ -44,6 +40,6 @@ public class UsersValidator extends BaseValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return UsersDto.class.equals(clazz);
+        return UserDto.class.equals(clazz);
     }
 }

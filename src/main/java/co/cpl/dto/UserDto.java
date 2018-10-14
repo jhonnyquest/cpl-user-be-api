@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
  * @since 05/08/2018
  * @version 1.0.0
  */
-public class UsersDto {
+public class UserDto {
 
     private  String id;
     private  String name;
@@ -57,7 +57,7 @@ public class UsersDto {
 
     @Override
     public String toString() {
-        return "UsersDto{" +
+        return "UserDto{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +

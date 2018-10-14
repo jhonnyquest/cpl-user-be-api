@@ -9,8 +9,5 @@ package co.cpl.enums;
  */
 public enum ResponseKeyName {
 	/** The matter. */
-	PAYMENT_RESPONSE,
-	BALANCE_RESPONSE,
-	SERVICE_RESPONSE,
-	TRANSACTION_RESPONSE
+	USER_RESPONSE
 }
