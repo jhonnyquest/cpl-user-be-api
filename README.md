@@ -2,7 +2,7 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
-### Payment microservice for Complaints project ###
+### Backend orchestrator for Complaints project ###
 
 * Quick summary
 * Version
