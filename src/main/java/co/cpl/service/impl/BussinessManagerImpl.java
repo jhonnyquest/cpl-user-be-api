@@ -50,8 +50,8 @@ public class BussinessManagerImpl implements BusinessManager{
         response.setPhone(user.get().getPhone());
         response.setName(user.get().getName());
         response.setStatus(user.get().getStatus());
-        response.setCreateDate(user.get().getCreatedAt());
-        response.setUpdateDate(user.get().getUpdatedAt());
+        response.setCreatedAt(user.get().getCreatedAt());
+        response.setUpdatedAt(user.get().getUpdatedAt());
         return response;
     }
 
@@ -69,8 +69,8 @@ public class BussinessManagerImpl implements BusinessManager{
             userDto.setName(user.getName());
             userDto.setPhone(user.getPhone());
             userDto.setStatus(user.getStatus());
-            userDto.setCreateDate(user.getCreatedAt());
-            userDto.setUpdateDate(user.getUpdatedAt());
+            userDto.setCreatedAt(user.getCreatedAt());
+            userDto.setUpdatedAt(user.getUpdatedAt());
             response.add(userDto);
         }
         return response;

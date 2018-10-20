@@ -9,11 +9,7 @@
  ******************************************************************/
 package co.cpl.dto;
 
-import co.cpl.enums.Currency;
-import co.cpl.enums.PaymentMethod;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -28,8 +24,8 @@ public class UserDto {
     private  String name;
     private  String status;
     private  String phone;
-    private  String createDate;
-    private  String updateDate;
+    private  String createdAt;
+    private  String updatedAt;
 
     @JsonProperty("id")
     public String getId() { return id;  }
@@ -47,13 +43,13 @@ public class UserDto {
     public String getPhone() { return phone;  }
     public void setPhone(String phone) { this.phone = phone;  }
 
-    @JsonProperty("createDate")
-    public String getCreateDate() { return createDate; }
-    public void setCreateDate(String createDate) { this.createDate = createDate; }
+    @JsonProperty("createdAt")
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
-    @JsonProperty("updateDate")
-    public String getUpdateDate() { return updateDate;  }
-    public void setUpdateDate(String updateDate) { this.updateDate = updateDate;  }
+    @JsonProperty("updatedAt")
+    public String getUpdatedAt() { return updatedAt;  }
+    public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt;  }
 
     @Override
     public String toString() {
@@ -62,8 +58,8 @@ public class UserDto {
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", phone='" + phone + '\'' +
-                ", createDate='" + createDate + '\'' +
-                ", updateDate='" + updateDate + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
                 '}';
     }
 

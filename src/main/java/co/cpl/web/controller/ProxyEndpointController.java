@@ -49,7 +49,7 @@ public class ProxyEndpointController extends BaseRestController {
 	private Properties errorProperties;
 
 	@Autowired
-	BusinessManager businessManager;
+    private BusinessManager businessManager;
 
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -58,7 +58,7 @@ public class ProxyEndpointController extends BaseRestController {
 		ResponseEntity<Object> responseEntity;
 		try {
             List<UserDto> users = businessManager.findUsers(limit, offset);
-            responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USER_RESPONSE, users));
+            responseEntity = ResponseEntity.ok(users);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -70,9 +70,10 @@ public class ProxyEndpointController extends BaseRestController {
         ResponseEntity<Object> responseEntity;
         try {
             String userId = businessManager.createUser(user);
-            HashMap<String, String> response = new HashMap<>();
-            response.put("user_id", userId);
-            responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USER_RESPONSE, response));
+			HashMap<String, String> response = new HashMap<>();
+			response.put("success", "true");
+			response.put("message", userId);
+            responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (HttpClientErrorException ex) {
             responseEntity = setErrorResponse(ex, request);
         }
@@ -84,9 +85,10 @@ public class ProxyEndpointController extends BaseRestController {
         ResponseEntity<Object> responseEntity;
         try {
             businessManager.updateUser(user);
-            HashMap<String, Boolean> response = new HashMap<>();
-            response.put("success", true);
-            responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USER_RESPONSE, response));
+            HashMap<String, String> response = new HashMap<>();
+			response.put("success", "true");
+			response.put("message", "Resource successfully updated");
+            responseEntity = ResponseEntity.ok(response);
         } catch (HttpClientErrorException ex) {
             responseEntity = setErrorResponse(ex, request);
         }
@@ -96,12 +98,10 @@ public class ProxyEndpointController extends BaseRestController {
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findUserById(@PathVariable("id") String id,
 											   HttpServletRequest request) {
-		//transactionValidator.validate(User, result);
-		//TODO: build custom validator for face_plate, if it apply
 		ResponseEntity<Object> responseEntity;
 		try {
-			UserDto users = businessManager.findUserById(id);
-			responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USER_RESPONSE, users));
+			UserDto user = businessManager.findUserById(id);
+			responseEntity = ResponseEntity.ok(user);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -114,9 +114,10 @@ public class ProxyEndpointController extends BaseRestController {
         ResponseEntity<Object> responseEntity;
         try {
             businessManager.deleteUser(id);
-            HashMap<String, Boolean> response = new HashMap<>();
-            response.put("success", true);
-            responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USER_RESPONSE, response));
+            HashMap<String, String> response = new HashMap<>();
+            response.put("success", "true");
+			response.put("message", "Resource successfully deleted");
+            responseEntity = ResponseEntity.ok(response);
         } catch (HttpClientErrorException ex) {
             responseEntity = setErrorResponse(ex, request);
         }
@@ -161,7 +162,7 @@ public class ProxyEndpointController extends BaseRestController {
 				map.put("message", "There was a problem trying to resolve the request");
 		}
 		return  ResponseEntity.status(status)
-				.body(createLoginFailResponse(ResponseKeyName.USER_RESPONSE, map, ex));
+				.body(buildExceptionResponse(ResponseKeyName.USER_RESPONSE, map, ex));
 
 	}
 }
