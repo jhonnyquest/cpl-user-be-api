@@ -54,10 +54,45 @@ public class BussinessManagerImpl implements BusinessManager{
         if (!users.isPresent()) {throw new HttpClientErrorException(HttpStatus.NOT_FOUND); }
         //TODO: Replace this code for mapper approach
         UsersDto response = new UsersDto();
-        response.setId(Id);
+        response.setId(users.get().getId());
         response.setPhone(users.get().getPhone());
         response.setName(users.get().getName());
+        response.setLast_name(users.get().getLast_name());
+        response.setCity(users.get().getCity());
+        response.setCountry(users.get().getCountry());
+        response.setImei(users.get().getImei());
         response.setStatus(users.get().getStatus());
+        response.setPassword(users.get().getPassword());
+        response.setEmail(users.get().getEmail());
+        return response;
+    }
+
+    @Override
+    public Boolean saveUser(UsersDto usersDto) {
+        return usersRepository.saveUser(usersDto);
+    }
+
+    @Override
+    public Boolean updateUser(UsersDto usersDto) {
+        return usersRepository.updateUser(usersDto);
+    }
+
+    @Override
+    public UsersDto login(UsersDto usersDto) {
+        Optional<Users> users = usersRepository.login(usersDto);
+        if (!users.isPresent()) {throw new HttpClientErrorException(HttpStatus.NOT_FOUND); }
+        //TODO: Replace this code for mapper approach
+        UsersDto response = new UsersDto();
+        response.setId(users.get().getId());
+        response.setPhone(users.get().getPhone());
+        response.setName(users.get().getName());
+        response.setLast_name(users.get().getLast_name());
+        response.setCity(users.get().getCity());
+        response.setCountry(users.get().getCountry());
+        response.setImei(users.get().getImei());
+        response.setStatus(users.get().getStatus());
+        response.setPassword(users.get().getPassword());
+        response.setEmail(users.get().getEmail());
         return response;
     }
 

@@ -23,4 +23,10 @@ public interface BusinessManager {
     // example:
     // Users loadPayment(UsersDto load);
     UsersDto findUserById(String id);
+
+    Boolean saveUser(UsersDto usersDto);
+
+    Boolean updateUser(UsersDto usersDto);
+
+    UsersDto login(UsersDto usersDto);
 }

@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import co.cpl.enums.ResponseKeyName;
@@ -84,6 +86,76 @@ public class ProxyEndpointController extends BaseRestController {
 //		return responseEntity;
 //    }
 
+	/**
+	* saveUser method: allows to create a new user from an object
+	*
+	* @param load the whole information necessary to create user
+	* @author omarquez
+	* @since 12/08/2018
+	* @return load confirmation registry
+	*/
+	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	public ResponseEntity<Object> saveUser(@Validated @RequestBody UsersDto load,
+											  BindingResult result, HttpServletRequest request) {
+
+		ResponseEntity<Object> responseEntity = apiValidator(result);
+		if (responseEntity != null) {
+			return responseEntity;
+		}
+		try {
+			Boolean registry = businessManager.saveUser(load);
+			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, registry));
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+
+		return responseEntity;
+	}
+
+	/**
+	 * updateUser method: allows to modify the data of the user that is sent (for now only imei and status)
+	 *
+	 * @param load the whole information necessary to perform update user
+	 * @author omarquez
+	 * @since 12/08/2018
+	 * @return load confirmation registry
+	 */
+	@RequestMapping(value = "/users/{user}", method = RequestMethod.POST)
+	public ResponseEntity<Object> updateUser(@Validated @RequestBody UsersDto load,
+										   BindingResult result, HttpServletRequest request) {
+
+		ResponseEntity<Object> responseEntity = apiValidator(result);
+		if (responseEntity != null) {
+			return responseEntity;
+		}
+		try {
+			Boolean registry = businessManager.updateUser(load);
+			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, registry));
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+
+		return responseEntity;
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<Object> login(@Validated @RequestBody UsersDto load,
+										   BindingResult result, HttpServletRequest request) {
+
+		ResponseEntity<Object> responseEntity = apiValidator(result);
+		if (responseEntity != null) {
+			return responseEntity;
+		}
+		try {
+			UsersDto registry = businessManager.login(load);
+			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, registry));
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+
+		return responseEntity;
+	}
+
 	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> findUserById(@PathVariable("id") String id,
 												HttpServletRequest request) {
@@ -92,7 +164,7 @@ public class ProxyEndpointController extends BaseRestController {
 		ResponseEntity<Object> responseEntity;
 		try {
 			UsersDto users = businessManager.findUserById(id);
-			responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.TRANSACTION_RESPONSE, users));
+			responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, users));
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -136,7 +208,7 @@ public class ProxyEndpointController extends BaseRestController {
 				map.put("message", "There was a problem trying to resolve the request");
 		}
 		return  ResponseEntity.status(status)
-				.body(createLoginFailResponse(ResponseKeyName.PAYMENT_RESPONSE, map, ex));
+				.body(createLoginFailResponse(ResponseKeyName.USERS_RESPONSE, map, ex));
 
 	}
 }
