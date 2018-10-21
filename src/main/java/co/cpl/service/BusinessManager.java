@@ -12,6 +12,8 @@ package co.cpl.service;
 
 import co.cpl.dto.UsersDto;
 
+import java.util.List;
+
 /***
  * Interface for business manager module
  *
@@ -21,6 +23,7 @@ import co.cpl.dto.UsersDto;
 public interface BusinessManager {
     // All implemented business methods should be declared here
     // example:
+
     // Users loadPayment(UsersDto load);
     UsersDto findUserById(String id);
 
@@ -29,4 +32,6 @@ public interface BusinessManager {
     Boolean updateUser(UsersDto usersDto);
 
     UsersDto login(UsersDto usersDto);
+
+    //void deleteUser(String userId);
 }

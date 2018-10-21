@@ -1,13 +1,9 @@
 package co.cpl.validators;
 
 import co.cpl.dto.UsersDto;
-import co.cpl.enums.Codes;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import java.util.Objects;
 
 // This is an example of how to declare constants
 // please build your own constants based on this

@@ -104,7 +104,7 @@ public class ProxyEndpointController extends BaseRestController {
 		}
 		try {
 			Boolean registry = businessManager.saveUser(load);
-			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, registry));
+			responseEntity =  ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -130,7 +130,7 @@ public class ProxyEndpointController extends BaseRestController {
 		}
 		try {
 			Boolean registry = businessManager.updateUser(load);
-			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, registry));
+			responseEntity =  ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -148,7 +148,7 @@ public class ProxyEndpointController extends BaseRestController {
 		}
 		try {
 			UsersDto registry = businessManager.login(load);
-			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, registry));
+			responseEntity =  ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -164,7 +164,7 @@ public class ProxyEndpointController extends BaseRestController {
 		ResponseEntity<Object> responseEntity;
 		try {
 			UsersDto users = businessManager.findUserById(id);
-			responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.USERS_RESPONSE, users));
+			responseEntity = ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -208,7 +208,7 @@ public class ProxyEndpointController extends BaseRestController {
 				map.put("message", "There was a problem trying to resolve the request");
 		}
 		return  ResponseEntity.status(status)
-				.body(createLoginFailResponse(ResponseKeyName.USERS_RESPONSE, map, ex));
+				.body(ResponseKeyName.USERS_RESPONSE);
 
 	}
 }

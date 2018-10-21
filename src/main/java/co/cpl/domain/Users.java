@@ -30,7 +30,6 @@ public class Users {
     private final String createdAt;
     private final String updatedAt;
 
-
     public Users(String id,
                  String name,
                  String status,
@@ -129,6 +128,7 @@ public class Users {
             this.name = name;
             return this;
         }
+
 
         public Users.Builder setLastName(String last_name) {
             this.last_name = last_name;

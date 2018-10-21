@@ -9,11 +9,7 @@
  ******************************************************************/
 package co.cpl.dto;
 
-import co.cpl.enums.Currency;
-import co.cpl.enums.PaymentMethod;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -96,7 +92,8 @@ public class UsersDto {
     public String getCreateDate() { return createDate; }
     public void setCreateDate(String createDate) { this.createDate = createDate; }
 
-    @JsonProperty("updateDate")
+
+    @JsonProperty("updatedDate")
     public String getUpdateDate() { return updateDate;  }
     public void setUpdateDate(String updateDate) { this.updateDate = updateDate;  }
 
