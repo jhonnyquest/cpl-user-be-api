@@ -10,11 +10,11 @@
 
 package co.cpl.web.controller;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
-import co.cpl.dto.UsersDto;
+import co.cpl.dto.UserDto;
 import co.cpl.service.BusinessManager;
-import co.cpl.validators.UsersValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,57 +49,83 @@ public class ProxyEndpointController extends BaseRestController {
 	private Properties errorProperties;
 
 	@Autowired
-	BusinessManager businessManager;
+    private BusinessManager businessManager;
 
-	@Autowired
-    UsersValidator loadRequestValidator;
 
-	// This is an example of how to create proxy endpoints controller methods
-	// please build your own constants based on this
-
-//	/**
-//	 * loadPayment method: perform a new money load for an specific customer
-//	 *
-//	 * @param load the whole information necessary to perform money load
-//	 * @author jmunoz
-//	 * @since 12/08/2018
-//	 * @return load confirmation registry
-//	 */
-//    @RequestMapping(value = "/payment/load", method = RequestMethod.POST)
-//    public ResponseEntity<Object> loadPayment(@Validated @RequestBody UsersDto load,
-//                                                 BindingResult result, HttpServletRequest request) {
-//		loadRequestValidator.validate(load, result);
-//		ResponseEntity<Object> responseEntity = apiValidator(result);
-//		if (responseEntity != null) {
-//			return responseEntity;
-//		}
-//
-//		try {
-//			Users registry = businessManager.loadPayment(load);
-//			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.PAYMENT_RESPONSE, registry));
-//		} catch (HttpClientErrorException ex) {
-//			responseEntity = setErrorResponse(ex, request);
-//		}
-//
-//		return responseEntity;
-//    }
-
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Object> findUserById(@PathVariable("id") String id,
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	public ResponseEntity<Object> findUsers(@RequestParam("limit") int limit, @RequestParam("offset") int offset,
 												HttpServletRequest request) {
-		//transactionValidator.validate(Users, result);
-		//TODO: build custom validator for face_plate, if it apply
 		ResponseEntity<Object> responseEntity;
 		try {
-			UsersDto users = businessManager.findUserById(id);
-			responseEntity = ResponseEntity.ok(createSuccessResponse(ResponseKeyName.TRANSACTION_RESPONSE, users));
+            List<UserDto> users = businessManager.findUsers(limit, offset);
+            responseEntity = ResponseEntity.ok(users);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
 		return responseEntity;
 	}
 
-	private ResponseEntity<Object> setErrorResponse(HttpClientErrorException ex, HttpServletRequest request) {
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public ResponseEntity<Object> createUser(@RequestBody UserDto user, HttpServletRequest request) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            String userId = businessManager.createUser(user);
+			HashMap<String, String> response = new HashMap<>();
+			response.put("success", "true");
+			response.put("message", userId);
+            responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex, request);
+        }
+        return responseEntity;
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    public ResponseEntity<Object> updateUser(@RequestBody UserDto user, HttpServletRequest request) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            businessManager.updateUser(user);
+            HashMap<String, String> response = new HashMap<>();
+			response.put("success", "true");
+			response.put("message", "Resource successfully updated");
+            responseEntity = ResponseEntity.ok(response);
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex, request);
+        }
+        return responseEntity;
+    }
+
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Object> findUserById(@PathVariable("id") String id,
+											   HttpServletRequest request) {
+		ResponseEntity<Object> responseEntity;
+		try {
+			UserDto user = businessManager.findUserById(id);
+			responseEntity = ResponseEntity.ok(user);
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+		return responseEntity;
+	}
+
+    @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> deleteUser(@PathVariable("id") String id,
+                                               HttpServletRequest request) {
+        ResponseEntity<Object> responseEntity;
+        try {
+            businessManager.deleteUser(id);
+            HashMap<String, String> response = new HashMap<>();
+            response.put("success", "true");
+			response.put("message", "Resource successfully deleted");
+            responseEntity = ResponseEntity.ok(response);
+        } catch (HttpClientErrorException ex) {
+            responseEntity = setErrorResponse(ex, request);
+        }
+        return responseEntity;
+    }
+
+
+    private ResponseEntity<Object> setErrorResponse(HttpClientErrorException ex, HttpServletRequest request) {
 		HashMap<String, Object> map = new HashMap<>();
 		HttpStatus status;
 		switch (ex.getStatusCode().value()) {
@@ -136,7 +162,7 @@ public class ProxyEndpointController extends BaseRestController {
 				map.put("message", "There was a problem trying to resolve the request");
 		}
 		return  ResponseEntity.status(status)
-				.body(createLoginFailResponse(ResponseKeyName.PAYMENT_RESPONSE, map, ex));
+				.body(buildExceptionResponse(ResponseKeyName.USER_RESPONSE, map, ex));
 
 	}
 }

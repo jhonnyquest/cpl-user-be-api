@@ -46,7 +46,7 @@ public abstract class BaseRestController {
 	   * @return the hash map - Success Response map object
 	   */
 	  // The payLoad name is passed as ResponseKeyName now instead of String (which was used earlier)
-	  protected HashMap<ResponseKeyName, Object> createSuccessResponse(ResponseKeyName payLoadName, Object object) {
+	  protected HashMap<ResponseKeyName, Object> buildSuccessResponse(ResponseKeyName payLoadName, Object object) {
 
 	      HashMap<ResponseKeyName, Object> responseMap = new LinkedHashMap<ResponseKeyName, Object>();
 	      responseMap.put(payLoadName, object);
@@ -79,7 +79,7 @@ public abstract class BaseRestController {
 	 * @return the hash map - Success Response map object
 	 */
 
-	protected HashMap<ResponseKeyName, Object> createLoginFailResponse(ResponseKeyName payLoadName, Object object, Exception e) {
+	protected HashMap<ResponseKeyName, Object> buildExceptionResponse(ResponseKeyName payLoadName, Object object, Exception e) {
 
 		LOGGER.error(payLoadName,e);
 		HashMap<ResponseKeyName, Object> responseMap = new LinkedHashMap<ResponseKeyName, Object>();
