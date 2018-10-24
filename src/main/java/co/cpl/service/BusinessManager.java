@@ -24,8 +24,9 @@ public interface BusinessManager {
     // All implemented business methods should be declared here
     // example:
 
-    // Users loadPayment(UsersDto load);
     UsersDto findUserById(String id);
+
+    List<UsersDto> findUsers(int limit, int offset);
 
     Boolean saveUser(UsersDto usersDto);
 
@@ -33,5 +34,5 @@ public interface BusinessManager {
 
     UsersDto login(UsersDto usersDto);
 
-    //void deleteUser(String userId);
+    void deleteUser(String userId);
 }

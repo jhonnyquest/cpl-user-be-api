@@ -10,6 +10,7 @@
 
 package co.cpl.web.controller;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 import co.cpl.dto.UsersDto;
@@ -53,38 +54,18 @@ public class ProxyEndpointController extends BaseRestController {
 	@Autowired
 	BusinessManager businessManager;
 
-	@Autowired
-    UsersValidator loadRequestValidator;
-
-	// This is an example of how to create proxy endpoints controller methods
-	// please build your own constants based on this
-
-//	/**
-//	 * loadPayment method: perform a new money load for an specific customer
-//	 *
-//	 * @param load the whole information necessary to perform money load
-//	 * @author jmunoz
-//	 * @since 12/08/2018
-//	 * @return load confirmation registry
-//	 */
-//    @RequestMapping(value = "/payment/load", method = RequestMethod.POST)
-//    public ResponseEntity<Object> loadPayment(@Validated @RequestBody UsersDto load,
-//                                                 BindingResult result, HttpServletRequest request) {
-//		loadRequestValidator.validate(load, result);
-//		ResponseEntity<Object> responseEntity = apiValidator(result);
-//		if (responseEntity != null) {
-//			return responseEntity;
-//		}
-//
-//		try {
-//			Users registry = businessManager.loadPayment(load);
-//			responseEntity =  ResponseEntity.ok(createSuccessResponse(ResponseKeyName.PAYMENT_RESPONSE, registry));
-//		} catch (HttpClientErrorException ex) {
-//			responseEntity = setErrorResponse(ex, request);
-//		}
-//
-//		return responseEntity;
-//    }
+	@RequestMapping(value = "/users", method = RequestMethod.GET)
+	public ResponseEntity<Object> findUsers(@RequestParam("limit") int limit, @RequestParam("offset") int offset,
+											HttpServletRequest request) {
+		ResponseEntity<Object> responseEntity;
+		try {
+			List<UsersDto> users = businessManager.findUsers(limit, offset);
+			responseEntity = ResponseEntity.ok(users);
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+		return responseEntity;
+	}
 
 	/**
 	* saveUser method: allows to create a new user from an object
@@ -171,6 +152,22 @@ public class ProxyEndpointController extends BaseRestController {
 		return responseEntity;
 	}
 
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteUser(@PathVariable("id") String id,
+											 HttpServletRequest request) {
+		ResponseEntity<Object> responseEntity;
+		try {
+			businessManager.deleteUser(id);
+			HashMap<String, String> response = new HashMap<>();
+			response.put("success", "true");
+			response.put("message", "Resource successfully deleted");
+			responseEntity = ResponseEntity.ok(response);
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+		return responseEntity;
+	}
+
 	private ResponseEntity<Object> setErrorResponse(HttpClientErrorException ex, HttpServletRequest request) {
 		HashMap<String, Object> map = new HashMap<>();
 		HttpStatus status;
@@ -208,7 +205,7 @@ public class ProxyEndpointController extends BaseRestController {
 				map.put("message", "There was a problem trying to resolve the request");
 		}
 		return  ResponseEntity.status(status)
-				.body(ResponseKeyName.USERS_RESPONSE);
+				.body(buildExceptionResponse(ResponseKeyName.USERS_RESPONSE, map, ex));
 
 	}
 }

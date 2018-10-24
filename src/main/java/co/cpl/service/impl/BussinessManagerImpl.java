@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -37,20 +39,9 @@ public class BussinessManagerImpl implements BusinessManager{
         usersRepository = new UsersRepository();
     }
 
-    // All business methods should be implemented here
-    // example:
-    // @Override
-    // public boolean isPayed(String serviceId) {
-    //        Optional<Service> service = paymentsRepository.getService(serviceId);
-    //        if (service.isPresent()) {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-
     @Override
     public UsersDto findUserById(String Id) {
-        Optional<Users> users = usersRepository.getUsers(Id);
+        Optional<Users> users = usersRepository.findUserById(Id);
         if (!users.isPresent()) {throw new HttpClientErrorException(HttpStatus.NOT_FOUND); }
         //TODO: Replace this code for mapper approach
         UsersDto response = new UsersDto();
@@ -68,6 +59,33 @@ public class BussinessManagerImpl implements BusinessManager{
     }
 
     @Override
+    public List<UsersDto> findUsers(int limit, int offset) {
+        List<Users> users = usersRepository.getUsers(limit, offset);
+        List<UsersDto> response = new LinkedList<>();
+        if(users.isEmpty()) {
+            return response;
+        }
+
+        for (Users user: users) {
+            UsersDto userDto = new UsersDto();
+            userDto.setId(user.getId());
+            userDto.setPhone(user.getPhone());
+            userDto.setName(user.getName());
+            userDto.setLast_name(user.getLast_name());
+            userDto.setCity(user.getCity());
+            userDto.setCountry(user.getCountry());
+            userDto.setImei(user.getImei());
+            userDto.setStatus(user.getStatus());
+            userDto.setPassword(user.getPassword());
+            userDto.setEmail(user.getEmail());
+            userDto.setCreateDate(user.getCreatedAt());
+            userDto.setUpdateDate(user.getUpdatedAt());
+            response.add(userDto);
+        }
+        return response;
+    }
+
+    @Override
     public Boolean saveUser(UsersDto usersDto) {
         return usersRepository.saveUser(usersDto);
     }
@@ -75,6 +93,16 @@ public class BussinessManagerImpl implements BusinessManager{
     @Override
     public Boolean updateUser(UsersDto usersDto) {
         return usersRepository.updateUser(usersDto);
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        Optional<Users> currentUser = usersRepository.findUserById(userId);
+        if (!currentUser.isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+        }
+
+        usersRepository.deleteUser(userId);
     }
 
     @Override
