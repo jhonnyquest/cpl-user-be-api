@@ -30,11 +30,25 @@ public class DataSourceSingleton {
 
             config.setDriverClassName("com.mysql.cj.jdbc.Driver");
             config.setJdbcUrl(Optional.ofNullable(System.getenv("USERS_DB_URL"))
-                    .orElse("jdbc:mysql://localhost:3306/cpl_users"));
-            config.setUsername(Optional.ofNullable(System.getenv("USERS_JDBC_USERNAME"))
-                    .orElse("cpluser"));
-            config.setPassword(Optional.ofNullable(System.getenv("USERS_JDBC_PASSWORD"))
-                    .orElse("cplpassword"));
+                    //.orElse("jdbc:mysql://localhost:3306/cpl_users"));
+                    .orElse("jdbc:mysql://104.197.233.102:3306/cpl_users"));
+
+            config.setUsername(Optional.ofNullable(
+                    System.getenv("OPERATOR_JDBC_USERNAME"))
+                    .orElse("incidencias"));
+                    //System.getenv("USERS_JDBC_USERNAME"))
+                    //.orElse("cpluser"));
+            config.setPassword(Optional.ofNullable(
+                    System.getenv("OPERATOR_JDBC_PASSWORD"))
+                    .orElse("incidencias"));
+                    //System.getenv("USERS_JDBC_PASSWORD"))
+                    //.orElse("cplpassword"));
+            /*
+            config.setUsername(Optional.ofNullable(System.getenv("OPERATOR_JDBC_USERNAME"))
+                    .orElse("incidencias"));
+            config.setPassword(Optional.ofNullable(System.getenv("OPERATOR_JDBC_PASSWORD"))
+                    .orElse("incidencias"));
+                   */
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
