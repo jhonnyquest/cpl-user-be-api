@@ -146,7 +146,7 @@ public class ProxyEndpointController extends BaseRestController {
 		ResponseEntity<Object> responseEntity;
 		try {
 			UsersDto users = businessManager.findUserById(id);
-			responseEntity = ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
+			responseEntity = ResponseEntity.ok(users);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}

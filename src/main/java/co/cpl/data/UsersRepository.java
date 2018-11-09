@@ -23,6 +23,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static javax.swing.text.html.HTML.Tag.I;
 
@@ -113,7 +114,7 @@ public class UsersRepository {
                         "'" + usersDto.getName() + "', '" + usersDto.getLast_name() + "', '" + usersDto.getPhone() + "', '" + usersDto.getEmail() + "', " +
                         "'" + usersDto.getDocument_type() + "', '" + usersDto.getDocument_number() + "', '" + usersDto.getCountry() + "', " +
                         "'" + usersDto.getCity() + "', '" + usersDto.getImei() + "', '" + usersDto.getType() + "', '" + usersDto.getStatus() + "', " +
-                        "'" + usersDto.getId() + "', '" + usersDto.getPassword() + "' " +
+                        "'" + UUID.randomUUID().toString() + "', '" + usersDto.getPassword() + "' " +
                     ");";
 
             int process = run.update(ds.getConnection(), query);

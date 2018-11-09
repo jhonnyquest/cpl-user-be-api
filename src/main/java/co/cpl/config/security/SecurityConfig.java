@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.authorizeRequests().mvcMatchers("/v1/*").permitAll().and().csrf().disable();
 		http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and().sessionManagement();
-		http.csrf().disable();
+		//http.csrf().disable();
 		
 		// http.authorizeRequests().mvcMatchers("/v1/login").anonymous().and().authorizeRequests()
 		// .antMatchers("/", "/onboarding", "/mortgages", "/statements", "/messages",
