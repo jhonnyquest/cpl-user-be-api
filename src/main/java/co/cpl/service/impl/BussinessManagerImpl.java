@@ -108,6 +108,8 @@ public class BussinessManagerImpl implements BusinessManager{
     @Override
     public UsersDto login(UsersDto usersDto) {
         Optional<Users> users = usersRepository.login(usersDto);
+
+        System.out.println(users.toString());
         if (!users.isPresent()) {throw new HttpClientErrorException(HttpStatus.NOT_FOUND); }
         //TODO: Replace this code for mapper approach
         UsersDto response = new UsersDto();
@@ -121,6 +123,7 @@ public class BussinessManagerImpl implements BusinessManager{
         response.setStatus(users.get().getStatus());
         response.setPassword(users.get().getPassword());
         response.setEmail(users.get().getEmail());
+        System.out.println(response.toString());
         return response;
     }
 

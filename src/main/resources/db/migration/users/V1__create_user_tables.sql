@@ -4,7 +4,7 @@
 
 CREATE TABLE cpl_users.users (
   id varchar(36) NOT NULL PRIMARY KEY,
-  document_type varchar(2) DEFAULT NULL,
+  document_type varchar(3) DEFAULT NULL,
   document_number varchar(20) DEFAULT NULL,
   name varchar(45) DEFAULT NULL,
   last_name varchar(45) DEFAULT NULL,

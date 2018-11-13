@@ -111,7 +111,7 @@ public class ProxyEndpointController extends BaseRestController {
 		}
 		try {
 			Boolean registry = businessManager.updateUser(load);
-			responseEntity =  ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
+			responseEntity =  ResponseEntity.ok(registry);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -130,7 +130,7 @@ public class ProxyEndpointController extends BaseRestController {
 		try {
 			UsersDto registry = businessManager.login(load);
 			System.out.println(registry.toString());
-			responseEntity =  ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
+			responseEntity =  ResponseEntity.ok(registry);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
