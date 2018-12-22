@@ -72,6 +72,77 @@ public class UsersRepository {
         }
     }
 
+  public Optional<Users> findUserByEmail(UsersDto usersDto) {
+    QueryRunner run = new QueryRunner(ds);
+    try {
+      String query = "SELECT * FROM cpl_users.users WHERE email = '" + usersDto.getEmail() + "';";
+      Optional<Users> users = run.query(query,
+              rs -> {
+                if (!rs.next()) {
+                  Optional<Object> empty = Optional.empty();
+                  return Optional.empty();
+                }
+                rs.last();
+                return Optional.ofNullable(new Users.Builder()
+                        .setId(rs.getString(1))
+                        .setDocumentType(rs.getString(2))
+                        .setDocumentNumber(rs.getString(3))
+                        .setName(rs.getString(4))
+                        .setLastName(rs.getString(5))
+                        .setCountry(rs.getString(6))
+                        .setCity(rs.getString(7))
+                        .setImei(rs.getString(8))
+                        .setType(rs.getString(9))
+                        .setStatus(rs.getString(10))
+                        .setPhone(rs.getString(11))
+                        .setEmail(rs.getString(12))
+                        .setPassword(rs.getString(13))
+                        .setCreatedAt(rs.getString(14))
+                        .setUpdatedAt(rs.getString(15))
+                        .build());
+              });
+      return users;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public Optional<Users> existsUser(UsersDto usersDto) {
+    QueryRunner run = new QueryRunner(ds);
+    try {
+      String query = "SELECT * FROM cpl_users.users WHERE email = '" + usersDto.getEmail() + "' " +
+          "OR (document_type = '" + usersDto.getDocument_type() + "' AND document_number = '" + usersDto.getDocument_number() + "');";
+      Optional<Users> users = run.query(query,
+              rs -> {
+                if (!rs.next()) {
+                  Optional<Object> empty = Optional.empty();
+                  return Optional.empty();
+                }
+                rs.last();
+                return Optional.ofNullable(new Users.Builder()
+                        .setId(rs.getString(1))
+                        .setDocumentType(rs.getString(2))
+                        .setDocumentNumber(rs.getString(3))
+                        .setName(rs.getString(4))
+                        .setLastName(rs.getString(5))
+                        .setCountry(rs.getString(6))
+                        .setCity(rs.getString(7))
+                        .setImei(rs.getString(8))
+                        .setType(rs.getString(9))
+                        .setStatus(rs.getString(10))
+                        .setPhone(rs.getString(11))
+                        .setEmail(rs.getString(12))
+                        .setPassword(rs.getString(13))
+                        .setCreatedAt(rs.getString(14))
+                        .setUpdatedAt(rs.getString(15))
+                        .build());
+              });
+      return users;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
     public List<Users> getUsers(int limit, int offset) {
         QueryRunner run = new QueryRunner(ds);
         try {
@@ -105,24 +176,29 @@ public class UsersRepository {
         }
     }
 
-    public Boolean saveUser(UsersDto usersDto) {
-        QueryRunner run = new QueryRunner(ds);
-        try {
+    public Integer saveUser(UsersDto usersDto) {
+        if (!existsUser(usersDto).isPresent()) {
+          QueryRunner run = new QueryRunner(ds);
+          try {
             String query = "INSERT INTO cpl_users.users (" +
-                        "name, last_name, phone, email, document_type, document_number, country, city, imei, type, status, id, password" +
+                    "name, last_name, phone, email, document_type, document_number, country, city, imei, type, status, id, password" +
                     ") VALUES (" +
-                        "'" + usersDto.getName() + "', '" + usersDto.getLast_name() + "', '" + usersDto.getPhone() + "', '" + usersDto.getEmail() + "', " +
-                        "'" + usersDto.getDocument_type() + "', '" + usersDto.getDocument_number() + "', '" + usersDto.getCountry() + "', " +
-                        "'" + usersDto.getCity() + "', '" + usersDto.getImei() + "', '" + usersDto.getType() + "', '" + usersDto.getStatus() + "', " +
-                        "'" + UUID.randomUUID().toString() + "', '" + usersDto.getPassword() + "' " +
+                    "'" + usersDto.getName() + "', '" + usersDto.getLast_name() + "', '" + usersDto.getPhone() + "', '" + usersDto.getEmail() + "', " +
+                    "'" + usersDto.getDocument_type() + "', '" + usersDto.getDocument_number() + "', '" + usersDto.getCountry() + "', " +
+                    "'" + usersDto.getCity() + "', '" + usersDto.getImei() + "', '" + usersDto.getType() + "', '" + usersDto.getStatus() + "', " +
+                    "'" + UUID.randomUUID().toString() + "', '" + usersDto.getPassword() + "' " +
                     ");";
 
             int process = run.update(ds.getConnection(), query);
             System.out.println(process);
-            return process > 0;
+            return 1;
 
-        } catch (SQLException e) {
+          } catch (SQLException e) {
             throw new RuntimeException(e);
+          }
+        }
+        else {
+          return 2;
         }
     }
 
@@ -141,6 +217,22 @@ public class UsersRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public Boolean changePass(UsersDto usersDto) {
+      QueryRunner run = new QueryRunner(ds);
+      try {
+        String query = "UPDATE cpl_users.users " +
+                "SET password = '" + usersDto.getPassword() + "' " +
+                "WHERE email = '" + usersDto.getEmail() + "'";
+
+        int process = run.update(ds.getConnection(), query);
+        System.out.println(process);
+        return process > 0;
+
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+  }
 
     public void deleteUser(String userId) {
         try {

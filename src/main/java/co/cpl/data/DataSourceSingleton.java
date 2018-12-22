@@ -38,11 +38,13 @@ public class DataSourceSingleton {
                     .orElse("incidencias"));
                     //System.getenv("USERS_JDBC_USERNAME"))
                     //.orElse("cpluser"));
+
             config.setPassword(Optional.ofNullable(
                     System.getenv("OPERATOR_JDBC_PASSWORD"))
                     .orElse("incidencias"));
                     //System.getenv("USERS_JDBC_PASSWORD"))
                     //.orElse("cplpassword"));
+
             /*
             config.setUsername(Optional.ofNullable(System.getenv("OPERATOR_JDBC_USERNAME"))
                     .orElse("incidencias"));

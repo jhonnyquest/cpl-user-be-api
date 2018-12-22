@@ -84,8 +84,8 @@ public class ProxyEndpointController extends BaseRestController {
 			return responseEntity;
 		}
 		try {
-			Boolean registry = businessManager.saveUser(load);
-			responseEntity =  ResponseEntity.ok(ResponseKeyName.USERS_RESPONSE);
+			Integer registry = businessManager.saveUser(load);
+			responseEntity =  ResponseEntity.ok(registry);
 		} catch (HttpClientErrorException ex) {
 			responseEntity = setErrorResponse(ex, request);
 		}
@@ -101,7 +101,7 @@ public class ProxyEndpointController extends BaseRestController {
 	 * @since 12/08/2018
 	 * @return load confirmation registry
 	 */
-	@RequestMapping(value = "/users/{user}", method = RequestMethod.POST)
+	@RequestMapping(value = "/users/update", method = RequestMethod.POST)
 	public ResponseEntity<Object> updateUser(@Validated @RequestBody UsersDto load,
 										   BindingResult result, HttpServletRequest request) {
 
@@ -119,7 +119,25 @@ public class ProxyEndpointController extends BaseRestController {
 		return responseEntity;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/users/change_pass", method = RequestMethod.POST)
+	public ResponseEntity<Object> changePass(@Validated @RequestBody UsersDto load,
+																					 BindingResult result, HttpServletRequest request) {
+
+		ResponseEntity<Object> responseEntity = apiValidator(result);
+		if (responseEntity != null) {
+			return responseEntity;
+		}
+		try {
+			Boolean registry = businessManager.changePass(load);
+			responseEntity =  ResponseEntity.ok(registry);
+		} catch (HttpClientErrorException ex) {
+			responseEntity = setErrorResponse(ex, request);
+		}
+
+		return responseEntity;
+	}
+
+	@RequestMapping(value = "/users/login", method = RequestMethod.POST)
 	public ResponseEntity<Object> login(@Validated @RequestBody UsersDto load,
 										   BindingResult result, HttpServletRequest request) {
 
@@ -153,7 +171,26 @@ public class ProxyEndpointController extends BaseRestController {
 		return responseEntity;
 	}
 
-	@RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/users/recover_password", method = RequestMethod.POST)
+  public ResponseEntity<Object> findUserByEmail(@Validated @RequestBody UsersDto load,
+																								BindingResult result, HttpServletRequest request) {
+    System.out.println(load.toString());
+		//transactionValidator.validate(Users, result);
+    //TODO: build custom validator for face_plate, if it apply
+    ResponseEntity<Object> responseEntity = apiValidator(result);
+		if (responseEntity != null) {
+			return responseEntity;
+		}
+		try {
+      UsersDto users = businessManager.findUserByEmail(load);
+      responseEntity = ResponseEntity.ok(users);
+    } catch (HttpClientErrorException ex) {
+      responseEntity = setErrorResponse(ex, request);
+    }
+    return responseEntity;
+  }
+
+	@RequestMapping(value = "/users/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Object> deleteUser(@PathVariable("id") String id,
 											 HttpServletRequest request) {
 		ResponseEntity<Object> responseEntity;

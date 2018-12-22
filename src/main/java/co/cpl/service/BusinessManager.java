@@ -26,11 +26,15 @@ public interface BusinessManager {
 
     UsersDto findUserById(String id);
 
+    UsersDto findUserByEmail(UsersDto usersDto);
+
     List<UsersDto> findUsers(int limit, int offset);
 
-    Boolean saveUser(UsersDto usersDto);
+    Integer saveUser(UsersDto usersDto);
 
     Boolean updateUser(UsersDto usersDto);
+
+    Boolean changePass(UsersDto usersDto);
 
     UsersDto login(UsersDto usersDto);
 

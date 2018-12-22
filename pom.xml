@@ -4,6 +4,17 @@
 	<groupId>ca.cpl</groupId>
 	<artifactId>cpl-user-be-api</artifactId>
 	<version>0.0.1</version>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>google-cloud-bom</artifactId>
+				<version>0.72.0-alpha</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<packaging>war</packaging>
 	<name>Complaints USERS</name>
 	<description>Complaints project - Users API</description>
@@ -119,6 +130,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.11</version>
         </dependency>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-storage</artifactId>
+			<version>1.55.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

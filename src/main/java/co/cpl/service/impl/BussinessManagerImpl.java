@@ -55,8 +55,34 @@ public class BussinessManagerImpl implements BusinessManager{
         response.setStatus(users.get().getStatus());
         response.setPassword(users.get().getPassword());
         response.setEmail(users.get().getEmail());
+        response.setDocument_number(users.get().getDocument_number());
+        response.setDocument_type(users.get().getDocument_type());
         return response;
     }
+
+  @Override
+  public UsersDto findUserByEmail(UsersDto usersDto) {
+    Optional<Users> users = usersRepository.findUserByEmail(usersDto);
+    if (!users.isPresent()) {throw new HttpClientErrorException(HttpStatus.NOT_FOUND); }
+    //TODO: Replace this code for mapper approach
+
+    System.out.println(users.toString());
+    UsersDto response = new UsersDto();
+    response.setId(users.get().getId());
+    response.setPhone(users.get().getPhone());
+    response.setName(users.get().getName());
+    response.setLast_name(users.get().getLast_name());
+    response.setCity(users.get().getCity());
+    response.setCountry(users.get().getCountry());
+    response.setImei(users.get().getImei());
+    response.setStatus(users.get().getStatus());
+    response.setPassword(users.get().getPassword());
+    response.setEmail(users.get().getEmail());
+    response.setDocument_number(users.get().getDocument_number());
+    response.setDocument_type(users.get().getDocument_type());
+    System.out.println(response.toString());
+    return response;
+  }
 
     @Override
     public List<UsersDto> findUsers(int limit, int offset) {
@@ -80,13 +106,15 @@ public class BussinessManagerImpl implements BusinessManager{
             userDto.setEmail(user.getEmail());
             userDto.setCreateDate(user.getCreatedAt());
             userDto.setUpdateDate(user.getUpdatedAt());
+            userDto.setDocument_number(user.getDocument_number());
+            userDto.setDocument_type(user.getDocument_type());
             response.add(userDto);
         }
         return response;
     }
 
     @Override
-    public Boolean saveUser(UsersDto usersDto) {
+    public Integer saveUser(UsersDto usersDto) {
         return usersRepository.saveUser(usersDto);
     }
 
@@ -94,6 +122,9 @@ public class BussinessManagerImpl implements BusinessManager{
     public Boolean updateUser(UsersDto usersDto) {
         return usersRepository.updateUser(usersDto);
     }
+
+    @Override
+    public Boolean changePass(UsersDto usersDto) { return usersRepository.changePass(usersDto); }
 
     @Override
     public void deleteUser(String userId) {
@@ -109,7 +140,7 @@ public class BussinessManagerImpl implements BusinessManager{
     public UsersDto login(UsersDto usersDto) {
         Optional<Users> users = usersRepository.login(usersDto);
 
-        System.out.println(users.toString());
+        //System.out.println(users.toString());
         if (!users.isPresent()) {throw new HttpClientErrorException(HttpStatus.NOT_FOUND); }
         //TODO: Replace this code for mapper approach
         UsersDto response = new UsersDto();
@@ -123,6 +154,8 @@ public class BussinessManagerImpl implements BusinessManager{
         response.setStatus(users.get().getStatus());
         response.setPassword(users.get().getPassword());
         response.setEmail(users.get().getEmail());
+        response.setDocument_number(users.get().getDocument_number());
+        response.setDocument_type(users.get().getDocument_type());
         System.out.println(response.toString());
         return response;
     }
